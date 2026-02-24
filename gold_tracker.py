@@ -2,73 +2,80 @@ import streamlit as st
 from scrapling import fetchers
 import pandas as pd
 
-# System and UI Configuration
-st.set_page_config(page_title="Human AI - Medical Intelligence", layout="wide")
+# Global System Configuration
+st.set_page_config(page_title="Human AI - Unified Medical Intel", layout="wide")
 
-# Target Global Medical Giants
-medical_giants = {
+# Consolidated Target List: Global Leaders & UAE Distributors
+medical_targets = {
     "Medtronic": "https://www.medtronic.com/us-en/healthcare-professionals/products.html",
     "J&J MedTech": "https://www.jnjmedtech.com/en-US/products",
     "Siemens Healthineers": "https://www.siemens-healthineers.com/products-services",
     "Abbott": "https://www.abbott.com/products.html",
     "Stryker": "https://www.stryker.com/us/en/portfolios.html",
+    "BD (Becton Dickinson)": "https://www.bd.com/en-us/offerings",
     "Philips": "https://www.philips.com/healthcare/solutions",
     "Boston Scientific": "https://www.bostonscientific.com/en-US/products.html",
     "Fresenius": "https://www.fresenius.com/products",
-    "Cardinal Health": "https://www.cardinalhealth.com/en/product-solutions.html"
+    "Cardinal Health": "https://www.cardinalhealth.com/en/product-solutions.html",
+    "GE HealthCare": "https://www.gehealthcare.com/products",
+    "Al Zahrawi Medical (Dubai)": "https://www.zahrawi.com/products/",
+    "Gulf Medical": "https://gulfmedical.com/products/",
+    "AKI Healthcare": "https://www.akigroup.com/healthcare",
+    "Leader Healthcare": "https://leaderhealthcare.co/products/",
+    "Amico Group": "https://www.amicogroup.com/specialties/"
 }
 
-# App Header
-st.title("🩺 Medical Device Intelligence - Aura Abu Dhabi")
-st.write("Professional Data Acquisition Engine for Global Healthcare Leaders.")
+# Application Header
+st.title("🌐 Unified Medical Intelligence Engine")
+st.write("Strategic Data Acquisition for Aura-AbuDhabi Bio-Digital Twin Project.")
 
-# Selection Interface
-selected_company = st.selectbox("Select Target Corporation:", list(medical_giants.keys()))
-target_url = medical_giants[selected_company]
+# Target Selection Interface
+selected_entity = st.selectbox("Select Target Corporation or Distributor:", list(medical_targets.keys()))
+current_url = medical_targets[selected_entity]
 
-st.info(f"Targeting Intelligence at: {target_url}")
+st.info(f"Stealth Protocol Ready for: {current_url}")
 
-# Dynamic Inputs
-target_selector = st.text_input("CSS Selector (e.g., h2, .product-card, .title):", "h2")
+# Custom Extraction Settings
+target_selector = st.text_input("Enter Extraction Selector (Default is h2 for titles):", "h2")
 
-# Processing Logic
-if st.button("Launch Stealth Extraction"):
-    if target_url and target_selector:
-        with st.spinner(f"Agent infiltrating {selected_company} infrastructure..."):
+# Main Execution Logic
+if st.button("Initialize Stealth Harvest"):
+    if current_url and target_selector:
+        with st.spinner(f"Infiltrating {selected_entity} Infrastructure..."):
             try:
-                # Scrapling Stealth Engine Initialization
+                # Initialize Scrapling with Stealth and Adaptive layers
                 fetcher = fetchers.StealthyFetcher()
-                fetcher.adaptive = True  # Self-healing if site structure changes
+                fetcher.adaptive = True 
                 
-                # Fetching with high-level browser emulation
-                page = fetcher.fetch(target_url, network_idle=True)
+                # Fetching the live page with Network Idle detection
+                page = fetcher.fetch(current_url, network_idle=True)
                 
-                # Multi-element extraction
-                extracted_data = page.css(target_selector).text_all()
+                # Dynamic data extraction using Scrapling CSS engine
+                harvested_data = page.css(target_selector).text_all()
                 
-                if extracted_data:
-                    st.success(f"Successfully harvested {len(extracted_data)} data points!")
+                if harvested_data:
+                    st.success(f"Success! Captured {len(harvested_data)} high-value data points.")
                     
-                    # Formatting into a Professional Data Table
-                    df = pd.DataFrame(extracted_data, columns=["Extracted Information"])
+                    # Formatting data for analysis
+                    df = pd.DataFrame(harvested_data, columns=["Extracted Technical Data"])
                     st.dataframe(df, use_container_width=True)
                     
-                    # Export Options
-                    csv_data = df.to_csv(index=False).encode('utf-8')
+                    # Intelligence Export
+                    csv_output = df.to_csv(index=False).encode('utf-8')
                     st.download_button(
-                        label="Download Dataset as CSV",
-                        data=csv_data,
-                        file_name=f"{selected_company}_intel.csv",
+                        label="Download Intelligence Report (CSV)",
+                        data=csv_output,
+                        file_name=f"{selected_entity}_report.csv",
                         mime="text/csv"
                     )
                 else:
-                    st.warning("No data found. The site might be using protected headers or different selectors.")
+                    st.warning("Warning: No data found. Verify the CSS selector for this specific domain.")
             
             except Exception as e:
-                st.error(f"Critical System Error: {str(e)}")
+                st.error(f"Critical System Failure: {str(e)}")
     else:
-        st.error("Operation Aborted: URL and Selector are mandatory.")
+        st.error("System Error: URL and Selector parameters are mandatory.")
 
-# Strategic Footer
+# Global Footer
 st.divider()
-st.caption("Human AI Engine | Strategic Acquisition Unit | Abu Dhabi - Egypt")
+st.caption("Human AI Project | Bio-Digital Twin Division | Abu Dhabi - UAE")
