@@ -1,6 +1,7 @@
 streamlit
 curl_cffi
 pandas
+playwright
  
  
  
