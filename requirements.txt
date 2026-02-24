@@ -1,7 +1,7 @@
 streamlit
-curl_cffi
+requests
+beautifulsoup4
 pandas
-playwright
  
  
  
