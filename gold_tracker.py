@@ -1,43 +1,74 @@
 import streamlit as st
 from scrapling import fetchers
+import pandas as pd
 
-# System Configuration
-st.set_page_config(page_title="Human AI - Universal Scraper", page_icon="🌐")
+# System and UI Configuration
+st.set_page_config(page_title="Human AI - Medical Intelligence", layout="wide")
 
-# UI Headers
-st.title("🌐 Universal Data Scraper - Human AI")
-st.write("Professional grade stealth extraction engine.")
+# Target Global Medical Giants
+medical_giants = {
+    "Medtronic": "https://www.medtronic.com/us-en/healthcare-professionals/products.html",
+    "J&J MedTech": "https://www.jnjmedtech.com/en-US/products",
+    "Siemens Healthineers": "https://www.siemens-healthineers.com/products-services",
+    "Abbott": "https://www.abbott.com/products.html",
+    "Stryker": "https://www.stryker.com/us/en/portfolios.html",
+    "Philips": "https://www.philips.com/healthcare/solutions",
+    "Boston Scientific": "https://www.bostonscientific.com/en-US/products.html",
+    "Fresenius": "https://www.fresenius.com/products",
+    "Cardinal Health": "https://www.cardinalhealth.com/en/product-solutions.html"
+}
 
-# Input Section
-url_input = st.text_input("Target URL:", placeholder="https://example.com")
-selector_input = st.text_input("Target CSS Selector:", placeholder=".price, #id, or h1")
+# App Header
+st.title("🩺 Medical Device Intelligence - Aura Abu Dhabi")
+st.write("Professional Data Acquisition Engine for Global Healthcare Leaders.")
 
-# Execution Logic
-if st.button('Execute Extraction'):
-    if url_input and selector_input:
-        with st.spinner('Scrapling Stealth Engine is fetching data...'):
+# Selection Interface
+selected_company = st.selectbox("Select Target Corporation:", list(medical_giants.keys()))
+target_url = medical_giants[selected_company]
+
+st.info(f"Targeting Intelligence at: {target_url}")
+
+# Dynamic Inputs
+target_selector = st.text_input("CSS Selector (e.g., h2, .product-card, .title):", "h2")
+
+# Processing Logic
+if st.button("Launch Stealth Extraction"):
+    if target_url and target_selector:
+        with st.spinner(f"Agent infiltrating {selected_company} infrastructure..."):
             try:
-                # Initialize StealthyFetcher with Adaptive learning enabled
+                # Scrapling Stealth Engine Initialization
                 fetcher = fetchers.StealthyFetcher()
-                fetcher.adaptive = True 
+                fetcher.adaptive = True  # Self-healing if site structure changes
                 
-                # Dynamic request with network idle waiting
-                page = fetcher.fetch(url_input, network_idle=True)
+                # Fetching with high-level browser emulation
+                page = fetcher.fetch(target_url, network_idle=True)
                 
-                # Targeted data extraction
-                result = page.css(selector_input).text()
+                # Multi-element extraction
+                extracted_data = page.css(target_selector).text_all()
                 
-                if result:
-                    st.success("✅ Extraction Completed:")
-                    st.code(result, language='text')
-                else:
-                    st.warning("⚠️ Element not found. Please verify the CSS Selector.")
+                if extracted_data:
+                    st.success(f"Successfully harvested {len(extracted_data)} data points!")
                     
+                    # Formatting into a Professional Data Table
+                    df = pd.DataFrame(extracted_data, columns=["Extracted Information"])
+                    st.dataframe(df, use_container_width=True)
+                    
+                    # Export Options
+                    csv_data = df.to_csv(index=False).encode('utf-8')
+                    st.download_button(
+                        label="Download Dataset as CSV",
+                        data=csv_data,
+                        file_name=f"{selected_company}_intel.csv",
+                        mime="text/csv"
+                    )
+                else:
+                    st.warning("No data found. The site might be using protected headers or different selectors.")
+            
             except Exception as e:
-                st.error(f"System Error: {str(e)}")
+                st.error(f"Critical System Error: {str(e)}")
     else:
-        st.info("Required: Please enter both URL and CSS Selector to proceed.")
+        st.error("Operation Aborted: URL and Selector are mandatory.")
 
-# Footer
+# Strategic Footer
 st.divider()
-st.caption("Human AI Engine | Strategic Intelligence Division | Abu Dhabi - Egypt")
+st.caption("Human AI Engine | Strategic Acquisition Unit | Abu Dhabi - Egypt")
